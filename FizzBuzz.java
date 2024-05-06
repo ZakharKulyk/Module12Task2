@@ -4,10 +4,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class FizzBuzz {
    public int n = 15;
-    private static BlockingQueue<String> outputQueue = new LinkedBlockingQueue<>();
+    public  BlockingQueue<String> outputQueue = new LinkedBlockingQueue<>();
 
 
     Thread A = new Thread(()->{
+        System.out.println("A started ");
 
        for(int i =1; i<=n; i++){
             if(fizz(i)){
@@ -16,13 +17,18 @@ public class FizzBuzz {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-            }else {
-
             }
+           try {
+               Thread.sleep(100);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
        }
+        System.out.println("A ended");
    });
 
    Thread B = new Thread(()->{
+       System.out.println("B started");
         for(int i =1; i<=n; i++){
             if(buzz(i)){
                 try {
@@ -32,9 +38,16 @@ public class FizzBuzz {
                     throw new RuntimeException(e);
                 }
             }
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
+       System.out.println("B ended");
    });
    Thread C = new Thread(()->{
+       System.out.println("C started");
        for(int i =1; i<=n; i++){
            if(fizzbuzz(i)){
                try {
@@ -43,20 +56,33 @@ public class FizzBuzz {
                    throw new RuntimeException(e);
                }
            }
+           try {
+               Thread.sleep(100);
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
        }
+       System.out.println("C ended");
 
    });
 
    Thread D = new Thread(()->{
-    for(int i =1; i<n; i++){
-        String result = null;
+       System.out.println("D started");
+    for(int i =1; i<=n; i++){
+       if(!(fizz(i))&&!(buzz(i))&&!(fizzbuzz(i))){
+           try {
+               outputQueue.put(Integer.toString(i));
+           } catch (InterruptedException e) {
+               throw new RuntimeException(e);
+           }
+       }
         try {
-            result = outputQueue.take();
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println(result);
     }
+       System.out.println("D ended");
 
    });
 
@@ -80,6 +106,7 @@ public class FizzBuzz {
        }else
            return false;
    }
+
 
 
 
